@@ -1,0 +1,1020 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "7700838e",
+   "metadata": {},
+   "source": [
+    "Question 1 -\n",
+    "Consider the following Python module:\n",
+    "a = 0\n",
+    "def b():\n",
+    " global a\n",
+    " a = c(a)\n",
+    "def c(a):\n",
+    " return a + 2\n",
+    "After importing the module into the interpreter, you execute:\n",
+    ">>> b()\n",
+    ">>> b()\n",
+    ">>> b()\n",
+    ">>> a\n",
+    "?\n",
+    "What value is displayed when the last expression (a) is evaluated? Explain your\n",
+    "answer by indicating what happens in every executed statement.# "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "5d8e5add",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "6"
+      ]
+     },
+     "execution_count": 1,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "a = 0\n",
+    "def b():\n",
+    "    global a      # all the references to a in b() are to be in global a\n",
+    "    a = c(a)      # function c is caled with value of 0 and the value is stored in a\n",
+    "def c(a):         # global variable a is called here\n",
+    "    return a + 2  # this has global scope\n",
+    "\n",
+    "# 2 is added each time of execution\n",
+    "b()      # the value of a is 2 (0+2)\n",
+    "b()      # the value of a is 4 (2+2)\n",
+    "b()      # the value of a is 6 (4+2)\n",
+    "a"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "032faffc",
+   "metadata": {},
+   "source": [
+    "Question 2 -\n",
+    "Function fileLength(), given to you, takes the name of a file as input and returns\n",
+    "the length of the file:\n",
+    ">>> fileLength('midterm.py')\n",
+    "284\n",
+    ">>> fileLength('idterm.py')\n",
+    "Traceback (most recent call last):\n",
+    "File \"<pyshell#34>\", line 1, in <module>\n",
+    " fileLength('idterm.py')\n",
+    "File \"/Users/me/midterm.py\", line 3, in fileLength\n",
+    " infile = open(filename)\n",
+    "FileNotFoundError: [Errno 2] No such file or directory:\n",
+    "'idterm.py'\n",
+    "As shown above, if the file cannot be found by the interpreter or if it cannot be read\n",
+    "as a text file, an exception will be raised. Modify function fileLength() so that a\n",
+    "friendly message is printed instead:\n",
+    ">>> fileLength('midterm.py')\n",
+    "358\n",
+    ">>> fileLength('idterm.py')\n",
+    "File idterm.py not found."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "8c99427a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "File midterm.py not found.\n",
+      "None\n",
+      "File idterm.py not found.\n",
+      "None\n"
+     ]
+    }
+   ],
+   "source": [
+    "def fileLength(filename):\n",
+    "    try:\n",
+    "        with open(filename, 'r') as file:\n",
+    "            content = file.read()\n",
+    "            length = len(content)\n",
+    "            return length\n",
+    "    except FileNotFoundError:\n",
+    "        print(f\"File {filename} not found.\")\n",
+    "\n",
+    "print(fileLength('midterm.py'))\n",
+    "print(fileLength('idterm.py'))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "a9b88390",
+   "metadata": {},
+   "source": [
+    "Question 3 - \n",
+    "Write a class named Marsupial that can be used as shown below:\n",
+    ">>> m = Marsupial()\n",
+    ">>> m.put_in_pouch('doll')\n",
+    ">>> m.put_in_pouch('firetruck')\n",
+    ">>> m.put_in_pouch('kitten')\n",
+    ">>> m.pouch_contents()\n",
+    "['doll', 'firetruck', 'kitten']\n",
+    "\n",
+    "Now write a class named Kangaroo as a subclass of Marsupial that inherits all the\n",
+    "attributes of Marsupial and also:\n",
+    "a. extends the Marsupial __init__ constructor to take, as input, the\n",
+    "coordinates x and y of the Kangaroo object,\n",
+    "b. supports method jump that takes number values dx and dy as input and\n",
+    "moves the kangaroo by dx units along the x-axis and by dy units along the yaxis, and\n",
+    "c. overloads the __str__ operator so it behaves as shown below."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "56b32bba",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "['doll', 'firetruck', 'kitten']"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "class Marsupial:\n",
+    "    def __init__(self):\n",
+    "        self.a=[]\n",
+    "    def put_in_pouch(self,put):\n",
+    "        self.a.append(put)\n",
+    "    def pouch_contents(self):\n",
+    "        return self.a\n",
+    "\n",
+    "        \n",
+    "m = Marsupial()\n",
+    "m.put_in_pouch('doll')\n",
+    "m.put_in_pouch('firetruck')\n",
+    "m.put_in_pouch('kitten')\n",
+    "m.pouch_contents()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "2d9cc35c",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "I am a Kangaroo located at coordinates (0,0)\n",
+      "I am a Kangaroo located at coordinates (3,0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "class Marsupial:\n",
+    "    def __init__(self):\n",
+    "        self.a=[]\n",
+    "    def put_in_pouch(self,put):\n",
+    "        self.a.append(put)\n",
+    "    def pouch_contents(self):\n",
+    "        return self.a\n",
+    "\n",
+    "class Kangaroo(Marsupial):\n",
+    "    def __init__(self,x,y):\n",
+    "        Marsupial.__init__(self)\n",
+    "        self.x=x\n",
+    "        self.y=y\n",
+    "    def Jump(self,dx,dy):\n",
+    "        self.x+=dx\n",
+    "        self.y+=self.y+dy\n",
+    "    def __str__(self):\n",
+    "        return(\"I am a Kangaroo located at coordinates ({},{})\".format(self.x,self.y))\n",
+    "        \n",
+    "m = Marsupial()\n",
+    "m.put_in_pouch('doll')\n",
+    "m.put_in_pouch('firetruck')\n",
+    "m.put_in_pouch('kitten')\n",
+    "m.pouch_contents()\n",
+    "\n",
+    "k = Kangaroo(0,0)\n",
+    "print(k) \n",
+    "k.put_in_pouch('doll') \n",
+    "k.put_in_pouch('firetruck')\n",
+    "k.put_in_pouch('kitten')\n",
+    "k.pouch_contents()\n",
+    "k.Jump(1,0)\n",
+    "k.Jump(1,0)\n",
+    "k.Jump(1,0)\n",
+    "print(k)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "82813864",
+   "metadata": {},
+   "source": [
+    "Question 4\n",
+    "Write function collatz() that takes a positive integer x as input and prints the\n",
+    "Collatz sequence starting at x. A Collatz sequence is obtained by repeatedly applying\n",
+    "this rule to the previous number x in the sequence:\n",
+    "x = {\n",
+    "𝑥/2 𝑖𝑓 𝑥 𝑖𝑠 𝑒𝑣𝑒𝑛\n",
+    "3𝑥 + 1 𝑖𝑓 𝑥 𝑖𝑠 𝑜𝑑𝑑\n",
+    "Your function should stop when the sequence gets to number 1. Your\n",
+    "implementation must be recursive, without any loops."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "96868598",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "collatz(1)\n",
+      "1\n",
+      "\n",
+      "collatz(10)\n",
+      "10\n",
+      "5\n",
+      "16\n",
+      "8\n",
+      "4\n",
+      "2\n",
+      "1\n"
+     ]
+    }
+   ],
+   "source": [
+    "def collatz(x):\n",
+    "    if x == 1:               #if x=1, function will stop running and return 1\n",
+    "        return [x]\n",
+    "    \n",
+    "    elif x%2==0:             #Check weather the given input is even or not\n",
+    "        return [x] + collatz(int(x/2))\n",
+    "    \n",
+    "    else:                    #check weather the given input is odd or not\n",
+    "        return [x] + collatz(int(x*3+1))\n",
+    "\n",
+    "\n",
+    "resultA=collatz(1)\n",
+    "resultB=collatz(10)\n",
+    "print(\"collatz(1)\")\n",
+    "print(*resultA,sep = \"\\n\") #Sep parameter to valuein new line\n",
+    "print(\"\\ncollatz(10)\")\n",
+    "print(*resultB, sep = \"\\n\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e692104a",
+   "metadata": {},
+   "source": [
+    "Question 5 -\n",
+    "Write a recursive method binary() that takes a non-negative\n",
+    "integer n and prints the binary representation of integer n."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "8dfef872",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "The binary representation of 45 is: 101101"
+     ]
+    }
+   ],
+   "source": [
+    "def binary(n):\n",
+    "    if n > 1:\n",
+    "        binary(n // 2)  # Recursive call with integer division\n",
+    "    print(n % 2, end='')\n",
+    "\n",
+    "# Test the method\n",
+    "num = 45\n",
+    "print(f\"The binary representation of {num} is: \", end='')\n",
+    "binary(num)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "4af385f0",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "The binary representation of 10 is: 1010"
+     ]
+    }
+   ],
+   "source": [
+    "num = 10\n",
+    "print(f\"The binary representation of {num} is: \", end='')\n",
+    "binary(num)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "3d222a9a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "The binary representation of 25 is: 11001"
+     ]
+    }
+   ],
+   "source": [
+    "num = 25\n",
+    "print(f\"The binary representation of {num} is: \", end='')\n",
+    "binary(num)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9642bda7",
+   "metadata": {},
+   "source": [
+    "Question 6\n",
+    "Implement a class named HeadingParser that can be used to parse an HTML\n",
+    "document, and retrieve and print all the headings in the document. You should\n",
+    "implement your class as a subclass of HTMLParser, defined in Standard Library\n",
+    "module html.parser. When fed a string containing HTML code, your class should\n",
+    "print the headings, one per line and in the order in which they appear in the\n",
+    "document. Each heading should be indented as follows: an h1 heading should have\n",
+    "indentation 0, and h2 heading should have indentation 1, etc. Test your\n",
+    "implementation using w3c.html."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "997c959f",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "W3C Mission\n",
+      " Principles\n"
+     ]
+    }
+   ],
+   "source": [
+    "from html.parser import HTMLParser\n",
+    "\n",
+    "\n",
+    "class HeadingParser(HTMLParser):\n",
+    "\n",
+    "    c = 0      \n",
+    "    i = 0     \n",
+    "    \n",
+    "    def handle_starttag(self, tag, attrs):\n",
+    "        if tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:\n",
+    "            self.c = 1                     \n",
+    "\n",
+    "    def handle_data(self, data):\n",
+    "        if self.c == 1:\n",
+    "            print(data.rjust(len(data) + self.i), end ='\\n') \n",
+    "    def handle_endtag(self, tag):\n",
+    "        if tag in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'h8', 'h9']:\n",
+    "            self.c = 0                    \n",
+    "            self.i +=1   \n",
+    "        \n",
+    "infile = open(\"w3c.txt\")  \n",
+    "content = infile.read() \n",
+    "infile.close() \n",
+    "hp = HeadingParser() \n",
+    "hp.feed(content)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8ffa62bf",
+   "metadata": {},
+   "source": [
+    "Question 7\n",
+    "Implement recursive function webdir() that takes as input: a URL (as a string) and\n",
+    "non-negative integers depth and indent. Your function should visit every web\n",
+    "page reachable from the starting URL web page in depth clicks or less, and print\n",
+    "each web page's URL. As shown below, indentation, specified by indent, should\n",
+    "be used to indicate the depth of a URL."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "4b89e9db",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "http://reed.cs.depaul.edu/lperkovic/test1.html\n",
+      " http://reed.cs.depaul.edu/lperkovic/test2.html\n",
+      "  http://reed.cs.depaul.edu/lperkovic/test4.html\n",
+      " http://reed.cs.depaul.edu/lperkovic/test3.html\n",
+      "  http://reed.cs.depaul.edu/lperkovic/test4.html\n"
+     ]
+    }
+   ],
+   "source": [
+    "from urllib.request import urlopen\n",
+    "from urllib.parse import urljoin\n",
+    "from html.parser import HTMLParser\n",
+    "\n",
+    "\n",
+    "class Collector(HTMLParser):\n",
+    "    def __init__(self, base_url):\n",
+    "        super().__init__()\n",
+    "        self.base_url = base_url\n",
+    "        self.links = []\n",
+    "\n",
+    "    def handle_starttag(self, tag, attrs):\n",
+    "        if tag == 'a':\n",
+    "            for name, value in attrs:\n",
+    "                if name == 'href':\n",
+    "                    url = urljoin(self.base_url, value)\n",
+    "                    if url.startswith('http'):\n",
+    "                        self.links.append(url)\n",
+    "\n",
+    "    def get_links(self):\n",
+    "        return self.links\n",
+    "\n",
+    "\n",
+    "def webdir(url, depth, indent):\n",
+    "    print(' ' * indent + url)\n",
+    "    if depth == 0:\n",
+    "        return\n",
+    "    try:\n",
+    "        resource = urlopen(url)\n",
+    "        content = resource.read().decode()\n",
+    "        collector = Collector(url)\n",
+    "        collector.feed(content)\n",
+    "        all_links = collector.get_links()\n",
+    "        for link in all_links:\n",
+    "            webdir(link, depth - 1, indent + 1)\n",
+    "    except:\n",
+    "        return\n",
+    "\n",
+    "\n",
+    "url = 'http://reed.cs.depaul.edu/lperkovic/test1.html'\n",
+    "\n",
+    "webdir(url, 2, 0)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "fee99501",
+   "metadata": {},
+   "source": [
+    "Question 8 -\n",
+    "Write SQL queries on the below database table that return:\n",
+    "a) All the temperature data.\n",
+    "b) All the cities, but without repetition.\n",
+    "c) All the records for India.\n",
+    "d) All the Fall records.\n",
+    "e) The city, country, and season for which the average rainfall is between 200\n",
+    "and 400 millimeters.\n",
+    "f) The city and country for which the average Fall temperature is above 20\n",
+    "degrees, in increasing temperature order.\n",
+    "g) The total annual rainfall for Cairo.\n",
+    "h) The total rainfall for each season.\n",
+    "City Country Season T"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "id": "dd605209",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<sqlite3.Cursor at 0x1d9d1855e40>"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import sqlite3\n",
+    "\n",
+    "con = sqlite3.connect('ipydb.db')\n",
+    "\n",
+    "rus = con.cursor()\n",
+    "rus.execute(\"CREATE TABLE Weather (City text, Country text, Season text,Temperature float,Rainfall float)\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "id": "2cad4fe5",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<sqlite3.Cursor at 0x1d9d1855e40>"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "rus.execute(\"INSERT INTO Weather VALUES ('Mumbai', 'India', 'Winter',24.8,5.9)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('Mumbai', 'India', 'Spring',28.4,16.2)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('Mumbai', 'India', 'Summer',27.9,1549.4 )\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('Mumbai', 'India', 'Fall',27.6,346.0)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('London', 'United Kingdom', 'Winter',4.2,207.7 )\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('London', 'United Kingdom', 'Spring',8.3,169.6)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('London', 'United Kingdom', 'Summer',15.7,157.0)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('London', 'United Kingdom', 'Fall',10.4,218.5)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('Cairo', 'Egypt', 'Winter',13.6,16.5)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('Cairo', 'Egypt', 'Spring',20.7,6.5)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('Cairo', 'Egypt', 'Summer',27.7,0.1)\")\n",
+    "\n",
+    "rus.execute(\"INSERT INTO Weather VALUES ('Cairo', 'Egypt', 'Fall',22.2,4.5)\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "id": "9b0219e4",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[('Mumbai', 'India', 'Winter', 24.8, 5.9),\n",
+       " ('Mumbai', 'India', 'Spring', 28.4, 16.2),\n",
+       " ('Mumbai', 'India', 'Summer', 27.9, 1549.4),\n",
+       " ('Mumbai', 'India', 'Fall', 27.6, 346.0),\n",
+       " ('London', 'United Kingdom', 'Winter', 4.2, 207.7),\n",
+       " ('London', 'United Kingdom', 'Spring', 8.3, 169.6),\n",
+       " ('London', 'United Kingdom', 'Summer', 15.7, 157.0),\n",
+       " ('London', 'United Kingdom', 'Fall', 10.4, 218.5),\n",
+       " ('Cairo', 'Egypt', 'Winter', 13.6, 16.5),\n",
+       " ('Cairo', 'Egypt', 'Spring', 20.7, 6.5),\n",
+       " ('Cairo', 'Egypt', 'Summer', 27.7, 0.1),\n",
+       " ('Cairo', 'Egypt', 'Fall', 22.2, 4.5)]"
+      ]
+     },
+     "execution_count": 26,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "rus.execute('SELECT * FROM Weather')\n",
+    "\n",
+    "rus.fetchall()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "96c83c39",
+   "metadata": {},
+   "source": [
+    "SQL QUERIES"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8dbed68d",
+   "metadata": {},
+   "source": [
+    "a) All the temperature data."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "id": "5f80b8cc",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(24.8,)\n",
+      "(28.4,)\n",
+      "(27.9,)\n",
+      "(27.6,)\n",
+      "(4.2,)\n",
+      "(8.3,)\n",
+      "(15.7,)\n",
+      "(10.4,)\n",
+      "(13.6,)\n",
+      "(20.7,)\n",
+      "(27.7,)\n",
+      "(22.2,)\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute('SELECT temperature FROM Weather')\n",
+    "\n",
+    "R=rus.fetchall()\n",
+    "\n",
+    "for item in R:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "85fbba78",
+   "metadata": {},
+   "source": [
+    "b) All the cities, but without repetition."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "id": "f4f93148",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "('Mumbai',)\n",
+      "('London',)\n",
+      "('Cairo',)\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute('SELECT DISTINCT City FROM Weather')\n",
+    "\n",
+    "B=rus.fetchall()\n",
+    "\n",
+    "for item in B:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "be0a0109",
+   "metadata": {},
+   "source": [
+    "c) All the records for India."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "id": "8b4ac415",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "('Mumbai', 'India', 'Winter', 24.8, 5.9)\n",
+      "('Mumbai', 'India', 'Spring', 28.4, 16.2)\n",
+      "('Mumbai', 'India', 'Summer', 27.9, 1549.4)\n",
+      "('Mumbai', 'India', 'Fall', 27.6, 346.0)\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute(\"SELECT * FROM Weather WHERE Country='India'\")\n",
+    "\n",
+    "C=rus.fetchall()\n",
+    "\n",
+    "for item in C:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "39585f5e",
+   "metadata": {},
+   "source": [
+    "d) All the Fall records."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "id": "99136183",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "('Mumbai', 'India', 'Fall', 27.6, 346.0)\n",
+      "('London', 'United Kingdom', 'Fall', 10.4, 218.5)\n",
+      "('Cairo', 'Egypt', 'Fall', 22.2, 4.5)\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute(\"SELECT * FROM Weather WHERE Season='Fall'\")\n",
+    "\n",
+    "D=rus.fetchall()\n",
+    "\n",
+    "for item in D:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2cb764eb",
+   "metadata": {},
+   "source": [
+    "e) The city, country, and season for which the average rainfall is between 200 and 400 millimeters."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "id": "b0e62662",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "('Mumbai', 'India', 'Fall')\n",
+      "('London', 'United Kingdom', 'Winter')\n",
+      "('London', 'United Kingdom', 'Fall')\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute(\"SELECT City,country,Season FROM Weather WHERE Rainfall BETWEEN 200 AND 400\")\n",
+    "\n",
+    "E=rus.fetchall()\n",
+    "\n",
+    "for item in E:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d1259f9e",
+   "metadata": {},
+   "source": [
+    "f) The city and country for which the average Fall temperature is above 20 degrees, in increasing temperature order."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "id": "75db4272",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "('Cairo', 'Egypt')\n",
+      "('Mumbai', 'India')\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute(\"SELECT City,country FROM Weather WHERE Season='Fall' AND temperature > 20 ORDER BY temperature ASC\")\n",
+    "\n",
+    "F=rus.fetchall()\n",
+    "\n",
+    "for item in F:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c5348699",
+   "metadata": {},
+   "source": [
+    "f) The city and country for which the average Fall temperature is above 20\n",
+    "degrees, in increasing temperature order."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "id": "42a4fd74",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "('Cairo', 'Egypt')\n",
+      "('Mumbai', 'India')\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute(\"SELECT City,country FROM Weather WHERE Season='Fall' AND temperature > 20 ORDER BY temperature ASC\")\n",
+    "\n",
+    "F=rus.fetchall()\n",
+    "\n",
+    "for item in F:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c08c0ed2",
+   "metadata": {},
+   "source": [
+    "g) The total annual rainfall for Cairo."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "id": "4a7c31a7",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(27.6,)\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute(\"SELECT SUM(Rainfall) FROM Weather WHERE City='Cairo'\")\n",
+    "\n",
+    "G=rus.fetchall()\n",
+    "\n",
+    "for item in G:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "19cad0b2",
+   "metadata": {},
+   "source": [
+    "h) The total rainfall for each season."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "id": "6b387a9e",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(569.0,)\n",
+      "(192.29999999999998,)\n",
+      "(1706.5,)\n",
+      "(230.1,)\n"
+     ]
+    }
+   ],
+   "source": [
+    "rus.execute(\"SELECT SUM(Rainfall) FROM Weather GROUP BY Season\")\n",
+    "\n",
+    "H=rus.fetchall()\n",
+    "\n",
+    "for item in H:\n",
+    "    \n",
+    "    print(item)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "b0564b67",
+   "metadata": {},
+   "source": [
+    "Question 9\n",
+    "Suppose list words is defined as follows:\n",
+    ">>> words = ['The', 'quick', 'brown', 'fox', 'jumps', 'over',\n",
+    "'the', 'lazy', 'dog']\n",
+    "Write list comprehension expressions that use list words and generate the following\n",
+    "lists:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "id": "64fa258b",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Uppercase words: ['THE', 'QUICK', 'BROWN', 'FOX', 'JUMPS', 'OVER', 'THE', 'LAZY', 'DOG']\n",
+      "Lowercase words: ['the', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog']\n",
+      "Word lengths: [3, 5, 5, 3, 5, 4, 3, 4, 3]\n",
+      "Word information: [['THE', 'the', 3], ['QUICK', 'quick', 5], ['BROWN', 'brown', 5], ['FOX', 'fox', 3], ['JUMPS', 'jumps', 5], ['OVER', 'over', 4], ['THE', 'the', 3], ['LAZY', 'lazy', 4], ['DOG', 'dog', 3]]\n",
+      "Long words: ['quick', 'brown', 'jumps', 'over', 'lazy']\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Given words\n",
+    "words = ['The', 'quick', 'brown', 'fox', 'jumps', 'over', 'the', 'lazy', 'dog']\n",
+    "\n",
+    "# Convert words to uppercase\n",
+    "uppercase_words = [word.upper() for word in words]\n",
+    "print(\"Uppercase words:\", uppercase_words)\n",
+    "\n",
+    "# Convert words to lowercase\n",
+    "lowercase_words = [word.lower() for word in words]\n",
+    "print(\"Lowercase words:\", lowercase_words)\n",
+    "\n",
+    "# Get word lengths\n",
+    "word_lengths = [len(word) for word in words]\n",
+    "print(\"Word lengths:\", word_lengths)\n",
+    "\n",
+    "# Generate word information (uppercase, lowercase, and length)\n",
+    "word_info = [[word.upper(), word.lower(), len(word)] for word in words]\n",
+    "print(\"Word information:\", word_info)\n",
+    "\n",
+    "# Get long words with length greater than or equal to 4\n",
+    "long_words = [word for word in words if len(word) >= 4]\n",
+    "print(\"Long words:\", long_words)\n"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.10.9"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
